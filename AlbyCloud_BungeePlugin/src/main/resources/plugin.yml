@@ -1,0 +1,8 @@
+name: AlbyCloud_BungeePlugin
+main: de.alb654.AlbyBungeePlugin.BungeePlugin
+version: 1.0
+author: ALB654
+
+commands:
+  cloudmessage:
+  banmessage:

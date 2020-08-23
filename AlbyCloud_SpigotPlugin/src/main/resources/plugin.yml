@@ -1,0 +1,19 @@
+name: AlbyCloud_SpigotPlugin
+main: de.alb654.AlbySpigotPlugin.SpigotPlugin
+version: 1.0
+author: ALB654
+description: The AlbyCloud SpigotPlugin
+
+commands:
+  perms:
+    aliases:
+      - permissions
+      - perm
+  bans:
+  jump:
+    aliases:
+      - j
+  blacklist:
+  ban:
+  nick:
+  unnick:
