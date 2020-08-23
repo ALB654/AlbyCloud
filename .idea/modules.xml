@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AlbyCloud.iml" filepath="$PROJECT_DIR$/AlbyCloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlbyCloud_BungeePlugin/AlbyCloud_BungeePlugin.iml" filepath="$PROJECT_DIR$/AlbyCloud_BungeePlugin/AlbyCloud_BungeePlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlbyCloud_Master/AlbyCloud_Master.iml" filepath="$PROJECT_DIR$/AlbyCloud_Master/AlbyCloud_Master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlbyCloud_Network/AlbyCloud_Network.iml" filepath="$PROJECT_DIR$/AlbyCloud_Network/AlbyCloud_Network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AlbyCloud_SpigotPlugin/AlbyCloud_SpigotPlugin.iml" filepath="$PROJECT_DIR$/AlbyCloud_SpigotPlugin/AlbyCloud_SpigotPlugin.iml" />
+    </modules>
+  </component>
+</project>

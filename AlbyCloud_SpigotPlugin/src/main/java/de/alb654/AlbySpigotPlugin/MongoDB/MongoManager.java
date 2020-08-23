@@ -20,6 +20,7 @@ public class MongoManager {
     public static final String RECENTCOLLECTION = "RecentCollection";
     public static final String BLACKLIST = "Blacklist";
     public static final String NICKLIST = "Nicklist";
+    public static final String REPORTS = "Reports";
 
     private final MongoClient client;
     private MongoDatabase database;

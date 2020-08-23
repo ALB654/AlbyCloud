@@ -6,6 +6,8 @@ package de.alb654.AlbySpigotPlugin.inventory.inventorys.report;
  */
 
 import de.alb654.AlbySpigotPlugin.inventory.BloodInv;
+import de.alb654.AlbySpigotPlugin.utils.GetItem;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 
@@ -17,7 +19,12 @@ public class ReportListInv extends BloodInv {
 
     @Override
     public void init(Player p) {
+        for(int i = 0; i < 9; i++) {
+            setItem(i, GetItem.getItem(Material.STAINED_GLASS_PANE, " ", 1, 7));
+            setItem(i + 45, GetItem.getItem(Material.STAINED_GLASS_PANE, " ", 1, 7));
+        }
 
+        setItem(4, GetItem.getItem(Material.SIGN, "§2Reports", 1, "§7Hier werden alle Reports angezeigt"));
     }
 
     @Override

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="BungeePlugin">
+    <output-path>$PROJECT_DIR$/AlbyCloud_Master/src/main/resources</output-path>
+    <root id="archive" name="BungeePlugin.jar">
+      <element id="module-output" name="AlbyCloud_BungeePlugin" />
+      <element id="module-output" name="AlbyCloud_Network" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/3.12.5/mongo-java-driver-3.12.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
