@@ -12,32 +12,47 @@ import java.util.Objects;
 
 public class RecentReportAction extends RecentAction {
 
-    private final String processedBy;
-    private final ArrayList<String> reportsFrom;
+    private final String processedByName;
+    private final ArrayList<String> reportsReasons;
+    private final boolean banned;
+    private final boolean deleted;
 
-    public RecentReportAction(long actionTime, String suspectUUID, String processedBy, ArrayList<String> reportsFrom) {
+    public RecentReportAction(long actionTime, String suspectUUID, String processedByName, ArrayList<String> reportsReasons, boolean banned, boolean deleted) {
         super(actionTime, suspectUUID, ActionType.REPORT);
-        this.processedBy = processedBy;
-        this.reportsFrom = reportsFrom;
+        this.processedByName = processedByName;
+        this.reportsReasons = reportsReasons;
+        this.banned = banned;
+        this.deleted = deleted;
     }
 
     public String getProcessedBy() {
-        return processedBy;
+        return processedByName;
     }
 
-    public ArrayList<String> getReportsFrom() {
-        return reportsFrom;
+    public ArrayList<String> getReportsReasons() {
+        return reportsReasons;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     @Override
     public Document toMongoDoc() {
-        return super.toMongoDoc().append("ProcessedBy", processedBy)
-                                 .append("reportsFrom", reportsFrom);
+        return super.toMongoDoc().append("processedByName", processedByName)
+                                 .append("reportsReasons", reportsReasons)
+                                 .append("banned", banned)
+                                 .append("deleted", deleted);
     }
 
     public static RecentReportAction createFromMongoDoc(Document doc) {
         return new RecentReportAction(doc.getLong("actionTime"), doc.getString("suspectUUID"),
-                                doc.getString("ProcessedBy"), new ArrayList<>(doc.getList("reportsFrom", String.class)));
+                                doc.getString("processedByName"), new ArrayList<>(doc.getList("reportsReasons", String.class)),
+                                doc.getBoolean("banned"), doc.getBoolean("deleted"));
     }
 
     @Override
@@ -46,20 +61,20 @@ public class RecentReportAction extends RecentAction {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         RecentReportAction that = (RecentReportAction) o;
-        return Objects.equals(processedBy, that.processedBy) &&
-                Objects.equals(reportsFrom, that.reportsFrom);
+        return Objects.equals(processedByName, that.processedByName) &&
+                Objects.equals(reportsReasons, that.reportsReasons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), processedBy, reportsFrom);
+        return Objects.hash(super.hashCode(), processedByName, reportsReasons, banned, deleted);
     }
 
     @Override
     public String toString() {
         return "RecentReportAction{" +
-                "processedBy='" + processedBy + '\'' +
-                ", reportFrom='" + reportsFrom + '\'' +
+                "processedByName='" + processedByName + '\'' +
+                ", reportsReasons='" + reportsReasons + '\'' +
                 ", actionTime=" + actionTime +
                 ", suspectUUID='" + suspectUUID + '\'' +
                 ", type=" + type +

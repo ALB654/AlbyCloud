@@ -34,6 +34,7 @@ public class PermGroupPermsGUI extends BloodInv {
         spigotSystemPermsLore.add("§7» §eBloodMC.Jump");
         spigotSystemPermsLore.add("§7» §eBloodMC.Blacklist");
         spigotSystemPermsLore.add("§7» §eBloodMC.Nick");
+        spigotSystemPermsLore.add("§7» BloodMC.Reports");
 
         bungeeSystemPermsLore.add(" ");
         bungeeSystemPermsLore.add("§7» §eBloodMC.CloudUpdates");

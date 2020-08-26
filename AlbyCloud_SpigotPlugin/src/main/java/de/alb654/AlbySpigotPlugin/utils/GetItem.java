@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -107,6 +108,16 @@ public class GetItem {
         return item;
     }
 
+    public static ItemStack getItem(Material material, String name, int anzahl, String... lore)
+    {
+        ItemStack item = new ItemStack(material, anzahl);
+        ItemMeta m = item.getItemMeta();
+        m.setDisplayName(name);
+        m.setLore(Arrays.asList(lore));
+        item.setItemMeta(m);
+        return item;
+    }
+
     public static ItemStack getItemWithoutAttribs(Material material, String name, int anzahl, String lore)
     {
         ItemStack item = new ItemStack(material, anzahl);
@@ -115,6 +126,19 @@ public class GetItem {
         List<String> l = new ArrayList<String>();
         l.add(lore);
         m.setLore(l);
+        m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS,
+                ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON,
+                ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
+        item.setItemMeta(m);
+        return item;
+    }
+
+    public static ItemStack getItemWithoutAttribs(Material material, String name, int anzahl, String... lore)
+    {
+        ItemStack item = new ItemStack(material, anzahl);
+        ItemMeta m = item.getItemMeta();
+        m.setDisplayName(name);
+        m.setLore(Arrays.asList(lore));
         m.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS,
                 ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_PLACED_ON,
                 ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);

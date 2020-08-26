@@ -18,6 +18,7 @@ import de.alb654.AlbySpigotPlugin.events.InventoryListener;
 import de.alb654.AlbySpigotPlugin.events.JoinAndQuitListener;
 import de.alb654.AlbySpigotPlugin.inventory.BloodInvManager;
 import de.alb654.AlbySpigotPlugin.network.MasterConnection;
+import de.alb654.AlbySpigotPlugin.report.ReportManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +39,7 @@ public class SpigotPlugin extends JavaPlugin {
     private RecentActionsManager recentActionsManager;
     private BlackListManager blackListManager;
     private NickManager nickManager;
+    private ReportManager reportManager;
 
     @Override
     public void onEnable() {
@@ -56,6 +58,7 @@ public class SpigotPlugin extends JavaPlugin {
         chatGetTextManager = new ChatGetTextManager();
 
         banManager = new BanManager(mongoManager);
+        reportManager = new ReportManager(mongoManager);
         recentActionsManager = new RecentActionsManager(mongoManager);
 
         blackListManager = new BlackListManager(mongoManager);
@@ -81,6 +84,8 @@ public class SpigotPlugin extends JavaPlugin {
         getCommand("ban").setExecutor(new BanCommand());
         getCommand("nick").setExecutor(new NickCommand());
         getCommand("unnick").setExecutor(new UnnickCommand());
+        getCommand("reports").setExecutor(new ReportsCommand());
+        getCommand("report").setExecutor(new ReportCommand());
     }
 
     private void registerListener() {
@@ -138,5 +143,9 @@ public class SpigotPlugin extends JavaPlugin {
 
     public NickManager getNickManager() {
         return nickManager;
+    }
+
+    public ReportManager getReportManager() {
+        return reportManager;
     }
 }

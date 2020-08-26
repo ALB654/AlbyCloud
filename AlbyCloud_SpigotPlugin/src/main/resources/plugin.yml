@@ -17,3 +17,5 @@ commands:
   ban:
   nick:
   unnick:
+  reports:
+  report:

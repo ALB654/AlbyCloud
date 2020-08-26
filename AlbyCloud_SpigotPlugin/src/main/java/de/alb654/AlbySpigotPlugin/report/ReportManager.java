@@ -7,6 +7,8 @@ package de.alb654.AlbySpigotPlugin.report;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import de.alb654.AlbySpigotPlugin.MongoDB.MongoManager;
+import de.alb654.AlbySpigotPlugin.SpigotPlugin;
+import de.alb654.AlbySpigotPlugin.recent.RecentReportAction;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import org.bson.Document;
 
@@ -36,8 +38,9 @@ public class ReportManager {
         }
     }
 
-    public void deleteReport(String uuid) {
-        reportsCollection.deleteOne(Filters.eq("UUID", uuid));
+    public void deleteReport(ReportCase rCase, String deleterName) {
+        reportsCollection.deleteOne(Filters.eq("UUID", rCase.getUuid()));
+        SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(System.currentTimeMillis(), rCase.getUuid(), deleterName, rCase.reportListToStringArray(), false, true));
     }
 
     public ArrayList<ReportCase> getReports() {
@@ -49,7 +52,7 @@ public class ReportManager {
     public ReportCase getReport(String uuid) {
         Document doc = reportsCollection.find(Filters.eq("UUID", uuid)).first();
         if(doc == null)
-            return new ReportCase(NameFetcher.getName(UUID.fromString(uuid)), uuid, null);
+            return new ReportCase(NameFetcher.getName(UUID.fromString(uuid)), uuid);
         else
             return new ReportCase(doc);
     }

@@ -11,52 +11,55 @@ import org.bson.Document;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ReportCase {
 
     private final String name;
     private final String uuid;
 
-    private final ArrayList<UUIDReason> reporterAndReasons;
+    private ArrayList<UUIDReason> reporterAndReasons;
 
     private boolean newReport;
     private boolean checking;
     private String checkedByUUID;
+    private long startedCheckingTime;
 
-    public ReportCase(String name, String uuid, ArrayList<UUIDReason> reporterAndReasons) {
+    public ReportCase(String name, String uuid) {
         this.name = name;
         this.uuid = uuid;
-        if(reporterAndReasons != null)
-            this.reporterAndReasons = reporterAndReasons;
-        else
-            this.reporterAndReasons = new ArrayList<>();
-
-        this.newReport = false;
+        this.reporterAndReasons = new ArrayList<>();
+        this.newReport = true;
         this.checking = false;
         this.checkedByUUID = "*";
+        this.startedCheckingTime = -1;
     }
 
     public ReportCase(Document doc) {
-        this(doc.getString("NAME"), doc.getString("UUID"), new ArrayList<>(doc.getList("BYs", UUIDReason.class)));
+        this(doc.getString("NAME"), doc.getString("UUID"));
 
-        this.newReport = true;
+        this.newReport = false;
         this.checking = doc.getBoolean("ACTIVE");
         this.checkedByUUID = doc.getString("CheckedBy");
+        this.startedCheckingTime = doc.getLong("StartCheckTime");
+        this.reporterAndReasons = getReportsListFromStringArray(doc.getList("BYs", String.class));
     }
 
     public Document getAsDocument() {
         return new Document("NAME", name)
                 .append("UUID", uuid)
-                .append("BYs", reporterAndReasons)
+                .append("BYs", reportListToStringArray())
                 .append("ACTIVE", checking)
-                .append("CheckedBy", checkedByUUID);
+                .append("CheckedBy", checkedByUUID)
+                .append("StartCheckTime", startedCheckingTime);
     }
 
     public void saveChangesInDB(MongoCollection<Document> collection) {
         if(isNewReport()) {
             collection.insertOne(getAsDocument());
         } else{
-            collection.updateOne(Filters.eq("UUID", uuid), getAsDocument());
+            collection.replaceOne(Filters.eq("UUID", uuid), getAsDocument());
         }
     }
 
@@ -72,6 +75,19 @@ public class ReportCase {
     public void setCheckedBy(String uuid) {
         this.checking = true;
         this.checkedByUUID = uuid;
+        this.startedCheckingTime = System.currentTimeMillis();
+    }
+
+    private ArrayList<UUIDReason> getReportsListFromStringArray(List<String> stringArray) {
+        ArrayList<UUIDReason> arr = new ArrayList<>();
+        stringArray.forEach(s -> arr.add(new UUIDReason(s.split(";")[0], s.split(";")[1])));
+        return arr;
+    }
+
+    public ArrayList<String> reportListToStringArray() {
+        ArrayList<String> arr = new ArrayList<>();
+        reporterAndReasons.forEach(ru -> arr.add(ru.toString()));
+        return arr;
     }
 
     public String getName() {
@@ -86,6 +102,10 @@ public class ReportCase {
         return uuid;
     }
 
+    public long getStartedCheckingTime() {
+        return startedCheckingTime;
+    }
+
     public boolean isActive() {
         return checking;
     }
@@ -94,9 +114,10 @@ public class ReportCase {
         return newReport;
     }
 
-    public class UUIDReason implements Serializable {
-        private String uuid;
-        private String reason;
+    public static class UUIDReason implements Serializable {
+
+        private final String uuid;
+        private final String reason;
 
         public UUIDReason(String uuid, String reason) {
             this.uuid = uuid;
@@ -109,6 +130,11 @@ public class ReportCase {
 
         public String getUuid() {
             return uuid;
+        }
+
+        @Override
+        public String toString() {
+            return uuid + ";" + reason;
         }
     }
 }
