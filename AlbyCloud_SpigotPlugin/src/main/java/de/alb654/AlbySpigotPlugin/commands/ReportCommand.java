@@ -29,9 +29,10 @@ public class ReportCommand implements CommandExecutor {
 
                     UUID uuid = NameFetcher.getUUID(name);
                     if(uuid != null) {
-                        if(!uuid.equals(player.getUniqueId()))
+                        if(!uuid.equals(player.getUniqueId())) {
                             SpigotPlugin.getSpigotPlugin().getReportManager().addReport(uuid.toString(), player.getUniqueId().toString(), reason);
-                        else
+                            player.sendMessage(CloudApi.Bprefix + "§7Vielen Dank für deinen Report! Wir werden uns darum kümmern.");
+                        } else
                             player.sendMessage(CloudApi.Bprefix + "§cDu kannst dich nicht selber reporten!");
 
                     } else
