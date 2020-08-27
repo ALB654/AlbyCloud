@@ -40,9 +40,7 @@ public class BanManager {
             bannedPlayerCollection.insertOne(bp.toMongoDoc());
             SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentBanAction(System.currentTimeMillis(), uuid.toString()));
 
-            if(!reason.isMute()){
-                CloudApi.getInstance().getBungeeConnection().sendMessage("banKick", name, reason.getReason());
-            }
+            CloudApi.getInstance().getBungeeConnection().sendMessage("banKick", name, reason.getReason(), !reason.isMute() + "");
         }
     }
 

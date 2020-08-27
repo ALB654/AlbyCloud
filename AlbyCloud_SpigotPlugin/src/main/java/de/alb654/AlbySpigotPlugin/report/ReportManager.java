@@ -8,6 +8,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import de.alb654.AlbySpigotPlugin.MongoDB.MongoManager;
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
+import de.alb654.AlbySpigotPlugin.api.CloudApi;
 import de.alb654.AlbySpigotPlugin.recent.RecentReportAction;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import org.bson.Document;
@@ -28,18 +29,19 @@ public class ReportManager {
         ReportCase rCase = getReport(uuid);
         rCase.addReport(reporterUUID, reason);
         rCase.saveChangesInDB(reportsCollection);
+
+        CloudApi.getInstance().getBungeeConnection().sendMessage("report", "msg", NameFetcher.getName(UUID.fromString(uuid)), NameFetcher.getName(UUID.fromString(reporterUUID)), reason);
     }
 
-    public void acceptReport(String checkerUUID, String reportUUID) {
+    public void acceptReport(String acceptorUUID, String reportUUID) {
         ReportCase rCase = getReport(reportUUID);
         if(!rCase.isNewReport()) {
-            rCase.setCheckedBy(checkerUUID);
-            rCase.saveChangesInDB(reportsCollection);
+            CloudApi.getInstance().getBungeeConnection().sendMessage("report", "accept", reportUUID, acceptorUUID);
         }
     }
 
     public void deleteReport(ReportCase rCase, String deleterName) {
-        reportsCollection.deleteOne(Filters.eq("UUID", rCase.getUuid()));
+        CloudApi.getInstance().getBungeeConnection().sendMessage("report", "delete", rCase.getUuid());
         SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(System.currentTimeMillis(), rCase.getUuid(), deleterName, rCase.reportListToStringArray(), false, true));
     }
 

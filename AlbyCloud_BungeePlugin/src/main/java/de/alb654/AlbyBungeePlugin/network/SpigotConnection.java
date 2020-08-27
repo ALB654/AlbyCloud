@@ -5,7 +5,9 @@ package de.alb654.AlbyBungeePlugin.network;
  * Created by Aaron Bernert on 30.6.2020
  */
 
+import de.alb654.AlbyBungeePlugin.BungeePlugin;
 import de.alb654.AlbyBungeePlugin.network.handle.handler.spigot.BanKickHandler;
+import de.alb654.AlbyBungeePlugin.network.handle.handler.spigot.ReportHandler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -24,6 +26,7 @@ public class SpigotConnection implements Listener {
     {
         messageHandler.put("sendPlayer", args -> ProxyServer.getInstance().getPlayer(UUID.fromString(args[0])).connect(ProxyServer.getInstance().getServerInfo(args[1])));
         messageHandler.put("banKick", new BanKickHandler());
+        messageHandler.put("report", new ReportHandler(BungeePlugin.getPlugin().getReportManager()));
     }
 
     @EventHandler

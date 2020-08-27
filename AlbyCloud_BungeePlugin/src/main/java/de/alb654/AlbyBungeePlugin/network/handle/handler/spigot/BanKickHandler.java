@@ -17,30 +17,48 @@ public class BanKickHandler implements SpigotConnection.PluginMessageHandler {
     @Override
     public void handleMessage(String[] args) {
         ProxiedPlayer suspect = ProxyServer.getInstance().getPlayer(args[0]);
-        if(suspect != null) {
-            suspect.disconnect(
-                    "§7• §b§lBloodMC §7•\n" +
-                      "\n" +
-                      "§c§lDu wurdest gebannt!\n" +
-                      "\n" +
-                      "§7Grund: §b" + args[1] + "\n" +
-                      "\n" +
-                      "§8Du wurdest zuunrecht gebannt? Du kannst hier einen Entbannungsantrag stellen:\n" +
-                      "§7Discord: §bdiscord.BloodMC.eu \n" +
-                      "§7Forum: §bforum.BloodMC.eu"
-            );
-        }
 
-        BungeePlugin.getPlugin().getBanMsgCommand().getReceiver().forEach(uuid -> {
-            ProxiedPlayer player = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
-            if(player != null) {
-                player.sendMessage("  ");
-                player.sendMessage(BungeePlugin.Bprefix + "========================================================");
-                player.sendMessage(BungeePlugin.Bprefix + "§a" + suspect.getName() + " §7wurde für §a" + args[1] + " §7gebannt!");
-                player.sendMessage(BungeePlugin.Bprefix + "========================================================");
-                player.sendMessage("  ");
+        System.out.println(args[2]);
+
+        if(args[2].equals("true")) {
+
+            if (suspect != null) {
+                suspect.disconnect(
+                        "§7• §b§lBloodMC §7•\n" +
+                                "\n" +
+                                "§c§lDu wurdest gebannt!\n" +
+                                "\n" +
+                                "§7Grund: §b" + args[1] + "\n" +
+                                "\n" +
+                                "§8Du wurdest zuunrecht gebannt? Du kannst hier einen Entbannungsantrag stellen:\n" +
+                                "§7Discord: §bdiscord.BloodMC.eu \n" +
+                                "§7Forum: §bforum.BloodMC.eu"
+                );
             }
-        });
+
+            BungeePlugin.getPlugin().getBanMsgCommand().getReceiver().forEach(uuid -> {
+                ProxiedPlayer player = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
+                if (player != null) {
+                    player.sendMessage("  ");
+                    player.sendMessage(BungeePlugin.Bprefix + "=================================");
+                    player.sendMessage(BungeePlugin.Bprefix + "§a" + args[0] + " §7wurde für §a" + args[1] + " §7gebannt!");
+                    player.sendMessage(BungeePlugin.Bprefix + "=================================");
+                    player.sendMessage("  ");
+                }
+            });
+
+        } else {
+            BungeePlugin.getPlugin().getBanMsgCommand().getReceiver().forEach(uuid -> {
+                ProxiedPlayer player = ProxyServer.getInstance().getPlayer(UUID.fromString(uuid));
+                if (player != null) {
+                    player.sendMessage("  ");
+                    player.sendMessage(BungeePlugin.Bprefix + "=================================");
+                    player.sendMessage(BungeePlugin.Bprefix + "§a" + args[0] + " §7wurde für §a" + args[1] + " §7gemuted!");
+                    player.sendMessage(BungeePlugin.Bprefix + "=================================");
+                    player.sendMessage("  ");
+                }
+            });
+        }
     }
 
 }

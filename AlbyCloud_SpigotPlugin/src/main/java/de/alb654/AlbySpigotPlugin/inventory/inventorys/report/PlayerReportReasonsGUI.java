@@ -45,10 +45,12 @@ public class PlayerReportReasonsGUI extends BloodInv {
                 int s = slot;
                 @Override
                 public void run() {
-                    setItem(slot, GetItem.getHead(NameFetcher.getName(UUID.fromString(reason.getUuid())), "§2" + NameFetcher.getName(UUID.fromString(reason.getUuid())),
+                    setItem(s, GetItem.getHead(NameFetcher.getName(UUID.fromString(reason.getUuid())), "§2" + NameFetcher.getName(UUID.fromString(reason.getUuid())),
                             "§7Grund: §2" + reason.getReason()));
                 }
             }.runTask(SpigotPlugin.getSpigotPlugin());
+
+            slot++;
         }
 
         setItem(4, GetItem.getItem(Material.NAME_TAG, "§2Reportgründe", 1, "§7Hier werden alle Reporter mit den Gründen angezeigt"));

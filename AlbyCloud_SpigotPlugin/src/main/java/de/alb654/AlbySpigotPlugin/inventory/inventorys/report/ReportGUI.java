@@ -4,7 +4,6 @@ package de.alb654.AlbySpigotPlugin.inventory.inventorys.report;/*
  */
 
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
-import de.alb654.AlbySpigotPlugin.api.CloudApi;
 import de.alb654.AlbySpigotPlugin.inventory.BloodInv;
 import de.alb654.AlbySpigotPlugin.report.ReportCase;
 import de.alb654.AlbySpigotPlugin.utils.GetItem;
@@ -14,8 +13,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 public class ReportGUI extends BloodInv {
 
@@ -67,13 +64,11 @@ public class ReportGUI extends BloodInv {
                 if(!rCase.isActive()) {
                     SpigotPlugin.getSpigotPlugin().getReportManager().acceptReport(getPlayer().getUniqueId().toString(), rCase.getUuid());
                     getPlayer().closeInventory();
-                    getPlayer().sendMessage(CloudApi.Bprefix + "§7Du hast den Report von §2" + rCase.getName() + "§7 angenommen.");
-                    getPlayer().sendMessage(CloudApi.Bprefix + "§7Du hast §215min §7Zeit um ihn zu bearbeiten.");
-                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
                 }
                 break;
             case 23:
-                if(rCase.isActive()) {
+                if(!rCase.isActive()) {
                     SpigotPlugin.getSpigotPlugin().getReportManager().deleteReport(rCase, NameFetcher.getName(getPlayer().getUniqueId()));
                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 1f);
                     new ReportsGUI(getPlayer());

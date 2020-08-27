@@ -7,11 +7,13 @@ package de.alb654.AlbyBungeePlugin;
 
 import de.alb654.AlbyBungeePlugin.commands.BanMsgCommand;
 import de.alb654.AlbyBungeePlugin.commands.CloudMsgCommand;
+import de.alb654.AlbyBungeePlugin.commands.ReportMsgCommand;
 import de.alb654.AlbyBungeePlugin.events.JoinEvent;
 import de.alb654.AlbyBungeePlugin.events.OnChatEvent;
 import de.alb654.AlbyBungeePlugin.mongo.MongoManager;
 import de.alb654.AlbyBungeePlugin.network.MasterConnection;
 import de.alb654.AlbyBungeePlugin.network.SpigotConnection;
+import de.alb654.AlbyBungeePlugin.report.ReportManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -31,8 +33,11 @@ public class BungeePlugin extends Plugin {
     private MasterConnection masterConnection;
     private MongoManager mongoManager;
 
+    private ReportManager reportManager;
+
     private CloudMsgCommand cloudMsgCommand;
     private BanMsgCommand banMsgCommand;
+    private ReportMsgCommand reportMsgCommand;
 
     @Override
     public void onEnable() {
@@ -46,6 +51,9 @@ public class BungeePlugin extends Plugin {
 
         cloudMsgCommand = new CloudMsgCommand("cloudmessage");
         banMsgCommand = new BanMsgCommand("banmessage");
+        reportMsgCommand = new ReportMsgCommand("reportmessage");
+
+        reportManager = new ReportManager(mongoManager.getCollection(MongoManager.REPORTS));
 
         registerEvents();
         registerCommands();
@@ -69,6 +77,7 @@ public class BungeePlugin extends Plugin {
     private void registerCommands() {
         ProxyServer.getInstance().getPluginManager().registerCommand(this, cloudMsgCommand);
         ProxyServer.getInstance().getPluginManager().registerCommand(this, banMsgCommand);
+        ProxyServer.getInstance().getPluginManager().registerCommand(this, reportMsgCommand);
     }
 
     public static BungeePlugin getPlugin() {
@@ -93,5 +102,13 @@ public class BungeePlugin extends Plugin {
 
     public BanMsgCommand getBanMsgCommand() {
         return banMsgCommand;
+    }
+
+    public ReportMsgCommand getReportMsgCommand() {
+        return reportMsgCommand;
+    }
+
+    public ReportManager getReportManager() {
+        return reportManager;
     }
 }
