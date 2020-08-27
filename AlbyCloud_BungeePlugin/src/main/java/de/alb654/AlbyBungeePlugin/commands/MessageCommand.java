@@ -12,11 +12,11 @@ import net.md_5.bungee.api.plugin.Command;
 
 import java.util.ArrayList;
 
-public abstract class MsgCommand extends Command {
+public abstract class MessageCommand extends Command {
 
     private final ArrayList<String> receiver = new ArrayList<>();
 
-    public MsgCommand(String name, String permission, String... aliases) {
+    public MessageCommand(String name, String permission, String... aliases) {
         super(name, permission, aliases);
     }
 

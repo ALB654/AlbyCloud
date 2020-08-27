@@ -6,7 +6,7 @@ package de.alb654.AlbyBungeePlugin.commands;
  */
 
 
-public class BanMsgCommand extends MsgCommand {
+public class BanMsgCommand extends MessageCommand {
 
     public BanMsgCommand(String name) {
         super(name, "BloodMC.BanMsg", "banmsg");

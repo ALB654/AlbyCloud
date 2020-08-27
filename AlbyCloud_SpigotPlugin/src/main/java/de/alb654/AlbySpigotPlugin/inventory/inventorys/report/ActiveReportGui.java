@@ -1,4 +1,6 @@
-package de.alb654.AlbySpigotPlugin.inventory.inventorys.report;/*
+package de.alb654.AlbySpigotPlugin.inventory.inventorys.report;
+
+/*
  * Copyright (c)
  * Created by Aaron Bernert on 27.8.2020
  */
