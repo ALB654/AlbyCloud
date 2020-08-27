@@ -86,6 +86,9 @@ public class NameFetcher {
             connection.setReadTimeout(5000);
             NameFetcher data = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), NameFetcher.class);
 
+            if(data == null)
+                return null;
+
             uuidCache.put(name, data.id);
             nameCache.put(data.id, data.name);
             return data.id;

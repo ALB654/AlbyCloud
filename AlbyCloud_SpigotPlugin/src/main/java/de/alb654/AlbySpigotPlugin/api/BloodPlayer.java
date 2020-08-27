@@ -10,12 +10,14 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import de.alb654.AlbySpigotPlugin.MongoDB.MongoManager;
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
+import de.alb654.AlbySpigotPlugin.api.server.CloudServer;
 import de.alb654.AlbySpigotPlugin.permissions.PermissionGroup;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.UUID;
 
 public class BloodPlayer {
 
@@ -24,7 +26,7 @@ public class BloodPlayer {
 
     public BloodPlayer(String name) {
         this.name = name;
-        this.uuid = NameFetcher.getUUID(name) == null ? "no" : NameFetcher.getUUID(name).toString();
+        this.uuid = NameFetcher.getUUID(name) == null ? "null" : NameFetcher.getUUID(name).toString();
     }
 
     @SuppressWarnings("unchecked")
@@ -52,6 +54,14 @@ public class BloodPlayer {
         setStat(Stat.PERM_GROUP, groups);
     }
 
+    public void addFriend(UUID uuid) {
+
+    }
+
+    public void removeFriend(UUID uuid) {
+
+    }
+
     public void setStat(Stat stat, Object value) {
         if(exists()) {
             MongoCollection<Document> mongoCollection = getCollection();
@@ -65,7 +75,11 @@ public class BloodPlayer {
     }
 
     public enum Stat {
-        PERM_GROUP
+        PERM_GROUP, BLOODS, LASTONLINE, ONLINETIME, FRIENDS, FRIEND_PARTY, FRIEND_EINLADUNG, FRIEND_JUMP, FRIEND_MSG
+    }
+
+    public enum FriendSettingState {
+        ALL, FRIENDS, NONE
     }
 
     private MongoCollection<Document> getCollection() {
@@ -83,7 +97,15 @@ public class BloodPlayer {
     public void createDefault() {
         Document doc = new Document("Name", name)
                 .append("UUID", uuid)
-                .append("PERM_GROUP", new ArrayList<>(Collections.singletonList("Default")));
+                .append("PERM_GROUP", new ArrayList<>(Collections.singletonList("Default")))
+                .append("BLOODS", 0)
+                .append("LASTONLINE", -1)
+                .append("ONLINETIME", 0)
+                .append("FRIENDS", new ArrayList<String>())
+                .append("FRIEND_PARTY", FriendSettingState.ALL.name())
+                .append("FRIEND_EINLADUNG", FriendSettingState.ALL.name())
+                .append("FRIEND_JUMP", FriendSettingState.ALL.name())
+                .append("FRIEND_MSG", FriendSettingState.ALL.name());
         getCollection().insertOne(doc);
     }
 

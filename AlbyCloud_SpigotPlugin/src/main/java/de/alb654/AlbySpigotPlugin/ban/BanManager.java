@@ -29,7 +29,7 @@ public class BanManager {
         bannedReasonCollection = mongoManager.getCollection(MongoManager.BANREASONS);
     }
 
-    public void banPlayer(String name, BanReason reason, String byName) {
+    public boolean banPlayer(String name, BanReason reason, String byName) {
         UUID uuid = NameFetcher.getUUID(name);
         if(uuid != null && !isBanned(uuid.toString())){
 
@@ -44,6 +44,7 @@ public class BanManager {
             CloudApi.getInstance().getBungeeConnection().sendMessage("banKick", name, reason.getReason(), !reason.isMute() + "");
 
             ReportCase reportCase;
+
             if((reportCase = SpigotPlugin.getSpigotPlugin().getReportManager().getReport(uuid.toString())) != null) {
                 if(reportCase.isActive()) {
                     UUID byUUID = NameFetcher.getUUID(byName);
@@ -51,13 +52,15 @@ public class BanManager {
                         if(byUUID.equals(UUID.fromString(reportCase.getCheckedByUUID()))) {
                             SpigotPlugin.getSpigotPlugin().getReportManager().agreeReport(
                                     NameFetcher.getName(UUID.fromString(reportCase.getCheckedByUUID())), reportCase);
-                            return;
+                            return true;
                         }
                     }
                 }
                 SpigotPlugin.getSpigotPlugin().getReportManager().deleteReport(reportCase, "Banned from: " + byName);
             }
+            return true;
         }
+        return false;
     }
 
     public void unbanPlayer(String uuid, String byName) {

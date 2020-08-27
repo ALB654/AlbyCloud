@@ -35,8 +35,10 @@ public class BanCommand implements CommandExecutor {
                 commandSender.sendMessage(CloudApi.Bprefix + "§cDieser Bangrund existiert nicht!");
                 return true;
             }
-            SpigotPlugin.getSpigotPlugin().getBanManager().banPlayer(StringUtils.capitalize(args[0].toLowerCase()), br, commandSender.getName());
-            commandSender.sendMessage(CloudApi.Bprefix + "§aSpieler bestraft.");
+            if(SpigotPlugin.getSpigotPlugin().getBanManager().banPlayer(StringUtils.capitalize(args[0].toLowerCase()), br, commandSender.getName()))
+                commandSender.sendMessage(CloudApi.Bprefix + "§aSpieler bestraft.");
+            else
+                commandSender.sendMessage(CloudApi.Bprefix + "§cSpieler ist bereits gebannt/gemuted.");
         }
         return true;
     }

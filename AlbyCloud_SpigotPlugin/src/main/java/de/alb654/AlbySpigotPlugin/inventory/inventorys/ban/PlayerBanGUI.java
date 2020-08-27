@@ -146,10 +146,15 @@ public class PlayerBanGUI extends BloodInv {
                 getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_NOTE_BASS, 1f, 1f);
                 break;
             case 22:
-                SpigotPlugin.getSpigotPlugin().getBanManager().banPlayer(suspect, BanReason.createCustom(currentReason, currentBanTime, currentlyMuting), getPlayer().getName());
-                getPlayer().closeInventory();
-                Title.sendTitle(getPlayer(), 2, 60, 2, "§6" + suspect + " §c" + (currentlyMuting ? "gemutet!" : "gebannt!"), "§7");
-                getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                if(SpigotPlugin.getSpigotPlugin().getBanManager().banPlayer(suspect, BanReason.createCustom(currentReason, currentBanTime, currentlyMuting), getPlayer().getName())) {
+                    getPlayer().closeInventory();
+                    Title.sendTitle(getPlayer(), 2, 60, 2, "§6" + suspect + " §c" + (currentlyMuting ? "gemutet!" : "gebannt!"), "§7");
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                } else {
+                    getPlayer().sendMessage(CloudApi.Bprefix + "§cDieser Spieler ist bereits gebannt!");
+                    getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 1f);
+                }
+
                 break;
             case 26:
                 new PlayerBanMenuGUI(getPlayer());
