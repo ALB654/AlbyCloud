@@ -30,18 +30,18 @@ public class LatestClosedReportsGUI extends BloodInv {
         }
 
         ArrayList<RecentAction> recentReports = SpigotPlugin.getSpigotPlugin().getRecentActionsManager().getRecentActions(RecentAction.ActionType.REPORT);
-        recentReports.sort((a, b) -> a.getActionTime() >= b.getActionTime() ? 1 : -1);
+        recentReports.sort((a, b) -> a.getActionTime() <= b.getActionTime() ? 1 : -1);
         for(int i = 0 ; i < 9 && i < recentReports.size(); i++) {
             RecentReportAction reportAction = (RecentReportAction) recentReports.get(i);
             if (reportAction.isBanned())
-                setItem(i + 9, GetItem.getItemWithoutAttribs(Material.DIAMOND_SWORD, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())), 1,
-                        "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size()));
+                setItem(i + 9, GetItem.getItemWithoutAttribs(Material.DIAMOND_SWORD, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())) + " §7bestätigt", 1,
+                        "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size(), "§7Bestätigt von: §2" + reportAction.getProcessedByName()));
             else if (reportAction.isDeleted())
-                setItem(i + 9, GetItem.getItem(Material.SULPHUR, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())), 1,
-                        "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size(), "§7Gelöscht von: §2" + reportAction.getProcessedBy()));
+                setItem(i + 9, GetItem.getItem(Material.SULPHUR, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())) + " §7gelöscht", 1,
+                        "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size(), "§7Gelöscht von: §2" + reportAction.getProcessedByName()));
             else
-                setItem(i + 9, GetItem.getItem(Material.WOOL, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())), 1,
-                        "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size(), 14));
+                setItem(i + 9, GetItem.getItem(Material.WOOL, "§2" + NameFetcher.getName(UUID.fromString(reportAction.getSuspectUUID())) + " §7nicht bestätigt", 1,
+                         14, "§7Anzahl Reports: §2" + reportAction.getReportsReasons().size(), "§7Bearbeitet von: §2" + reportAction.getProcessedByName()));
 
         }
 

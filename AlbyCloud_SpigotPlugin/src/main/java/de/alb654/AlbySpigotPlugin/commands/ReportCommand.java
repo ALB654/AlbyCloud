@@ -5,6 +5,8 @@ package de.alb654.AlbySpigotPlugin.commands;/*
 
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
 import de.alb654.AlbySpigotPlugin.api.CloudApi;
+import de.alb654.AlbySpigotPlugin.inventory.inventorys.report.ActiveReportGui;
+import de.alb654.AlbySpigotPlugin.report.ReportCase;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -41,7 +43,13 @@ public class ReportCommand implements CommandExecutor {
                 } else
                     player.sendMessage(CloudApi.Bprefix + "§c/report <name> <grund>");
             } else if(player.hasPermission("BloodMC.Reports")) {
+                ReportCase rCase = SpigotPlugin.getSpigotPlugin().getReportManager().getActiveReportFrom(player.getUniqueId().toString());
+                if(rCase == null) {
+                    player.sendMessage(CloudApi.Bprefix + "§cDu beobachtest gerade keinen Spieler");
+                    return true;
+                }
 
+                new ActiveReportGui(player, rCase);
             } else {
                 player.sendMessage(CloudApi.Bprefix + "§c/report <name> <grund>");
             }

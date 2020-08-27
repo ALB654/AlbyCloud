@@ -158,6 +158,16 @@ public class GetItem {
         return item;
     }
 
+    public static ItemStack getItem(Material material, String name, int anzahl, int subid, String... lore)
+    {
+        ItemStack item = new ItemStack(material, anzahl, (short) subid);
+        ItemMeta m = item.getItemMeta();
+        m.setDisplayName(name);
+        m.setLore(Arrays.asList(lore));
+        item.setItemMeta(m);
+        return item;
+    }
+
     public static ItemStack getItem(Material material, String name, int anzahl, List<String> lore, int subid)
     {
         ItemStack item = new ItemStack(material, anzahl, (short) subid);

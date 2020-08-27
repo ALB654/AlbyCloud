@@ -12,6 +12,7 @@ import de.alb654.AlbySpigotPlugin.SpigotPlugin;
 import de.alb654.AlbySpigotPlugin.api.CloudApi;
 import de.alb654.AlbySpigotPlugin.recent.RecentBanAction;
 import de.alb654.AlbySpigotPlugin.recent.RecentUnbanAction;
+import de.alb654.AlbySpigotPlugin.report.ReportCase;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import org.bson.Document;
 
@@ -41,13 +42,30 @@ public class BanManager {
             SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentBanAction(System.currentTimeMillis(), uuid.toString()));
 
             CloudApi.getInstance().getBungeeConnection().sendMessage("banKick", name, reason.getReason(), !reason.isMute() + "");
+
+            ReportCase reportCase;
+            if((reportCase = SpigotPlugin.getSpigotPlugin().getReportManager().getReport(uuid.toString())) != null) {
+                if(reportCase.isActive()) {
+                    UUID byUUID = NameFetcher.getUUID(byName);
+                    if(byUUID != null) {
+                        if(byUUID.equals(UUID.fromString(reportCase.getCheckedByUUID()))) {
+                            SpigotPlugin.getSpigotPlugin().getReportManager().agreeReport(
+                                    NameFetcher.getName(UUID.fromString(reportCase.getCheckedByUUID())), reportCase);
+                            return;
+                        }
+                    }
+                }
+                SpigotPlugin.getSpigotPlugin().getReportManager().deleteReport(reportCase, "Banned from: " + byName);
+            }
         }
     }
 
     public void unbanPlayer(String uuid, String byName) {
         if(isBanned(uuid)) {
             BanPlayer bp = getBannedPlayer(uuid);
-            SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentUnbanAction(System.currentTimeMillis(), uuid, byName, bp.getUntilTime(), bp.getByName(), bp.getReason()));
+            SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(
+                    new RecentUnbanAction(System.currentTimeMillis(), uuid, byName, bp.getUntilTime(), bp.getByName(), bp.getReason()));
+
             bannedPlayerCollection.deleteOne(Filters.eq("UUID", uuid));
         }
     }

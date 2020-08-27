@@ -25,7 +25,7 @@ public class RecentReportAction extends RecentAction {
         this.deleted = deleted;
     }
 
-    public String getProcessedBy() {
+    public String getProcessedByName() {
         return processedByName;
     }
 

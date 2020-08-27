@@ -17,10 +17,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class ReportGUI extends BloodInv {
 
     private final ReportCase rCase;
+    private final boolean hasActiveReport;
 
     public ReportGUI(Player player, ReportCase rCase) {
         super(player, "§2Report §7- §2" + rCase.getName(), (short) 3);
 
+        this.hasActiveReport = SpigotPlugin.getSpigotPlugin().getReportManager().getActiveReportFrom(player.getUniqueId().toString()) != null;
         this.rCase = rCase;
         initS();
     }
@@ -47,7 +49,7 @@ public class ReportGUI extends BloodInv {
         setItem(16, GetItem.getItemWithoutAttribs(Material.MAP, "§2Gründe", 1, "§7Siehe dir alle Reporter + Gründe an",
                 "§7Anzahl: §2" + rCase.getReporterAndReasons().size()));
 
-        if(!rCase.isActive()) {
+        if(!rCase.isActive() && !hasActiveReport) {
             setItem(21, GetItem.getItem(Material.EMERALD_BLOCK, "§aAnnehmen", 1, "§7Du hast 15min Zeit um dich um den Fall zu kümmern"));
             setItem(23, GetItem.getItem(Material.REDSTONE_BLOCK, "§cLöschen", 1));
         }
@@ -61,14 +63,14 @@ public class ReportGUI extends BloodInv {
                 new PlayerReportReasonsGUI(getPlayer(), rCase);
                 break;
             case 21:
-                if(!rCase.isActive()) {
+                if(!rCase.isActive() && !hasActiveReport) {
                     SpigotPlugin.getSpigotPlugin().getReportManager().acceptReport(getPlayer().getUniqueId().toString(), rCase.getUuid());
                     getPlayer().closeInventory();
                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_LEVER_CLICK, 1f, 1f);
                 }
                 break;
             case 23:
-                if(!rCase.isActive()) {
+                if(!rCase.isActive() && !hasActiveReport) {
                     SpigotPlugin.getSpigotPlugin().getReportManager().deleteReport(rCase, NameFetcher.getName(getPlayer().getUniqueId()));
                     getPlayer().playSound(getPlayer().getLocation(), Sound.BLOCK_ANVIL_LAND, 1f, 1f);
                     new ReportsGUI(getPlayer());

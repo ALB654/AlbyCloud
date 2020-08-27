@@ -42,13 +42,33 @@ public class ReportManager {
 
     public void deleteReport(ReportCase rCase, String deleterName) {
         CloudApi.getInstance().getBungeeConnection().sendMessage("report", "delete", rCase.getUuid());
-        SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(System.currentTimeMillis(), rCase.getUuid(), deleterName, rCase.reportListToStringArray(), false, true));
+        SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(
+                System.currentTimeMillis(), rCase.getUuid(), deleterName, rCase.reportListToStringArray(), false, true));
+    }
+
+    public void agreeReport(String agreerName, ReportCase rCase) {
+        CloudApi.getInstance().getBungeeConnection().sendMessage("report", "delete", rCase.getUuid());
+        SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(
+                System.currentTimeMillis(), rCase.getUuid(), agreerName, rCase.reportListToStringArray(), true, false));
+    }
+
+    public void disagreeReport(String agreerName, ReportCase rCase) {
+        CloudApi.getInstance().getBungeeConnection().sendMessage("report", "delete", rCase.getUuid());
+        SpigotPlugin.getSpigotPlugin().getRecentActionsManager().addRecentAction(new RecentReportAction(
+                System.currentTimeMillis(), rCase.getUuid(), agreerName, rCase.reportListToStringArray(), false, false));
     }
 
     public ArrayList<ReportCase> getReports() {
         ArrayList<ReportCase> cases = new ArrayList<>();
         reportsCollection.find().forEach((Consumer<? super Document>) doc -> cases.add(new ReportCase(doc)));
         return cases;
+    }
+
+    public ReportCase getActiveReportFrom(String checkerUUID) {
+        Document doc = reportsCollection.find(Filters.eq("CheckedBy", checkerUUID)).first();
+        if(doc != null)
+            return new ReportCase(doc);
+        return null;
     }
 
     public ReportCase getReport(String uuid) {
