@@ -44,7 +44,7 @@ public class BlacklistCommand implements CommandExecutor {
                         commandSender.sendMessage(CloudApi.Bprefix + "§cDieses Word ist nicht auf der Blacklist.");
                 }
             } else {
-                commandSender.sendMessage(CloudApi.Bprefix + "§c/balcklist add/remove <word>");
+                commandSender.sendMessage(CloudApi.Bprefix + "§c/blacklist add/remove <word>");
             }
         }
         return true;

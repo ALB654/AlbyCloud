@@ -105,7 +105,10 @@ public class BungeeServer extends ExternalProcess {
     protected void onStartFailure() {}
 
     @Override
-    protected void onStop() {
+    protected void onStop() { }
+
+    @Override
+    protected void postStop() {
         if(running) {
             running = false;
             Main.getAlbyCloud().getScreenManager().deleteScreen("Bungee");

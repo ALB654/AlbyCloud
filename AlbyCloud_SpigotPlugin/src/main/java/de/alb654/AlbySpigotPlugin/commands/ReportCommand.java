@@ -4,6 +4,7 @@ package de.alb654.AlbySpigotPlugin.commands;/*
  */
 
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
+import de.alb654.AlbySpigotPlugin.api.BloodPlayer;
 import de.alb654.AlbySpigotPlugin.api.CloudApi;
 import de.alb654.AlbySpigotPlugin.inventory.inventorys.report.ActiveReportGui;
 import de.alb654.AlbySpigotPlugin.report.ReportCase;
@@ -32,8 +33,12 @@ public class ReportCommand implements CommandExecutor {
                     UUID uuid = NameFetcher.getUUID(name);
                     if(uuid != null) {
                         if(!uuid.equals(player.getUniqueId())) {
-                            SpigotPlugin.getSpigotPlugin().getReportManager().addReport(uuid.toString(), player.getUniqueId().toString(), reason);
-                            player.sendMessage(CloudApi.Bprefix + "§7Vielen Dank für deinen Report! Wir werden uns darum kümmern.");
+                            if(!new BloodPlayer(name).exists()) {
+                                player.sendMessage(CloudApi.Bprefix + "§cDieser Spieler war noch nie online!");
+                            } else {
+                                SpigotPlugin.getSpigotPlugin().getReportManager().addReport(uuid.toString(), player.getUniqueId().toString(), reason);
+                                player.sendMessage(CloudApi.Bprefix + "§7Vielen Dank für deinen Report! Wir werden uns darum kümmern.");
+                            }
                         } else
                             player.sendMessage(CloudApi.Bprefix + "§cDu kannst dich nicht selber reporten!");
 
@@ -48,7 +53,6 @@ public class ReportCommand implements CommandExecutor {
                     player.sendMessage(CloudApi.Bprefix + "§cDu beobachtest gerade keinen Spieler");
                     return true;
                 }
-
                 new ActiveReportGui(player, rCase);
             } else {
                 player.sendMessage(CloudApi.Bprefix + "§c/report <name> <grund>");

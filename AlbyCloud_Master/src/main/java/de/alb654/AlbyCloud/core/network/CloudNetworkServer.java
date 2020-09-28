@@ -7,8 +7,11 @@ package de.alb654.AlbyCloud.core.network;
 
 import de.alb654.AlbyCloud.Main;
 import de.alb654.AlbyCloud.core.network.handle.PacketHandler;
+import de.alb654.AlbyCloud.core.network.handle.spigot.SpigotCloudCommandHandle;
 import de.alb654.AlbyCloud.core.network.handle.spigot.SpigotMovePlayersHandle;
+import de.alb654.AlbyCloud.core.network.handle.spigot.SpigotSafeWorldAsTemplateHandle;
 import de.alb654.AlbyCloud.core.network.handle.spigot.SpigotUpdateHandle;
+import de.alb654.network.spigot.SpigotInCloudCommandPacket;
 import de.alb654.network.spigot.SpigotInLoginPacket;
 
 public class CloudNetworkServer extends NetworkServer {
@@ -26,6 +29,8 @@ public class CloudNetworkServer extends NetworkServer {
 
         addPacketHandler("SPIGOT_UPDATE", new SpigotUpdateHandle());
         addPacketHandler("SPIGOT_MOVE_PLAYERS", new SpigotMovePlayersHandle());
+        addPacketHandler("SPIGOT_SAFE_WORLD_AS_TEMPLATE", new SpigotSafeWorldAsTemplateHandle());
+        addPacketHandler("SPIGOT_CLOUD_COMMAND", new SpigotCloudCommandHandle());
     }
 
     public CloudNetworkServer(int port) {

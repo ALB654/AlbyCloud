@@ -6,10 +6,10 @@ package de.alb654.AlbyCloud.commands;
  */
 public abstract class Command {
 
-    private String name;
-    private String[] aliases;
-    private String description;
-    private String usage;
+    private final String name;
+    private final String[] aliases;
+    private final String description;
+    private final String usage;
 
     public Command(String name, String description, String usage, String... aliases) {
         this.name = name;
@@ -35,4 +35,5 @@ public abstract class Command {
     public String getUsage() {
         return usage;
     }
+
 }

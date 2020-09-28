@@ -12,6 +12,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Copyright (c)
@@ -125,5 +126,28 @@ public class Screen {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public String toString() {
+        return "Screen{" +
+                "name='" + name + '\'' +
+                ", active=" + active +
+                ", logFile=" + logFile +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Screen screen = (Screen) o;
+        return active == screen.active &&
+                Objects.equals(name, screen.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, active);
     }
 }

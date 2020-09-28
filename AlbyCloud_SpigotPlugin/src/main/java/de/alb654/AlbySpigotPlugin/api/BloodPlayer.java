@@ -10,7 +10,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import de.alb654.AlbySpigotPlugin.MongoDB.MongoManager;
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
-import de.alb654.AlbySpigotPlugin.api.server.CloudServer;
 import de.alb654.AlbySpigotPlugin.permissions.PermissionGroup;
 import de.alb654.AlbySpigotPlugin.utils.NameFetcher;
 import org.bson.Document;
@@ -54,12 +53,28 @@ public class BloodPlayer {
         setStat(Stat.PERM_GROUP, groups);
     }
 
+    @SuppressWarnings("unchecked")
     public void addFriend(UUID uuid) {
-
+        ArrayList<String> friends = (ArrayList<String>) getStat(Stat.FRIENDS);
+        if(friends != null) {
+            String sUuid = uuid.toString();
+            if(!friends.contains(sUuid)) {
+                friends.add(sUuid);
+                setStat(Stat.FRIENDS, friends);
+            }
+        }
     }
 
+    @SuppressWarnings("unchecked")
     public void removeFriend(UUID uuid) {
-
+        ArrayList<String> friends = (ArrayList<String>) getStat(Stat.FRIENDS);
+        if(friends != null) {
+            String sUuid = uuid.toString();
+            if(friends.contains(sUuid)) {
+                friends.remove(sUuid);
+                setStat(Stat.FRIENDS, friends);
+            }
+        }
     }
 
     public void setStat(Stat stat, Object value) {

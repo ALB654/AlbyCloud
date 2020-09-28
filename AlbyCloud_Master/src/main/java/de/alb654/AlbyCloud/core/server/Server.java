@@ -90,6 +90,12 @@ public abstract class Server extends ExternalProcess {
     @Override
     protected boolean preStart() {
         cloudScreen.addMsg("Lade Dateien von '" + getId() + "'...");
+
+        if(!isServerVersionSupported()) {
+            cloudScreen.addMsg("Die Serverversion '" + serverVersion + "' ist nicht Supportet!", LogLevel.ERROR);
+            return false;
+        }
+
         if(rootFolder == null) {
             cloudScreen.addMsg("Kein Template/Save von '" + getId() + "' vorhanden. Erstelle Default...", LogLevel.WARNING);
             return createAndCopyDefaultTemplate() && replacePortInServerProperties() && setNameYMLAndPluginInPluginFolder();
@@ -122,16 +128,21 @@ public abstract class Server extends ExternalProcess {
         isRunning = false;
         stopped = true;
 
-        if(getProcess().isAlive()) {
+        if(getProcess() != null && getProcess().isAlive()) {
             cloudScreen.addMsg("ServerStopEvent aufgerufen, obwohl Process noch läuft! Versuche ihn zu stoppen...", LogLevel.ERROR);
             getProcess().destroy();
         }
 
-        Main.getAlbyCloud().getServerManager().removeServer(this);
-        Main.getAlbyCloud().getScreenManager().deleteScreen(getId());
-
         if(!removePortInServerProperties())
             cloudScreen.addMsg("Konnte Port in Server.Properties bei '" + getId() + "' nicht auf %port% setzen!", LogLevel.WARNING);
+    }
+
+    @Override
+    protected void postStop() {
+        stopped = true;
+
+        Main.getAlbyCloud().getServerManager().removeServer(this);
+        Main.getAlbyCloud().getScreenManager().deleteScreen(getId());
 
         if(onStopped(serverFolder)) {
             try {
@@ -336,7 +347,7 @@ public abstract class Server extends ExternalProcess {
         return false;
     }
 
-    private boolean removePort(File f, int port) {
+    protected boolean removePort(File f, int port) {
         try {
             String content = new String(Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8);
             content = content.replace(""+port, "%port%");
@@ -346,6 +357,10 @@ public abstract class Server extends ExternalProcess {
             cloudScreen.addError(e, "Ersetzen des Ports bei '" + getId() + "'");
             return false;
         }
+    }
+
+    private boolean isServerVersionSupported(){
+        return getClass().getResource("/" + getJarName()) != null;
     }
 
     private String getJarName() {

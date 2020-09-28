@@ -86,6 +86,8 @@ public class SpigotPlugin extends JavaPlugin {
         getCommand("unnick").setExecutor(new UnnickCommand());
         getCommand("reports").setExecutor(new ReportsCommand());
         getCommand("report").setExecutor(new ReportCommand());
+        getCommand("saveWorld").setExecutor(new SaveWorldCommand());
+        getCommand("cloud").setExecutor(new CloudCommand());
     }
 
     private void registerListener() {

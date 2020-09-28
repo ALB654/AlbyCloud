@@ -23,6 +23,8 @@ public abstract class ExternalProcess {
 
     protected abstract void onStop();
 
+    protected abstract void postStop();
+
     protected abstract void postStart();
 
     protected abstract boolean preStart();
@@ -48,12 +50,13 @@ public abstract class ExternalProcess {
                     Main.getAlbyCloud().getScreenManager().getActiveScreen().addError(e, "ausführen von '" + processFileName + "' in '" + processThread.getName() + "'");
                 }
 
+                onStop();
             } else {
                 Main.getAlbyCloud().getScreenManager().getActiveScreen().addMsg("Konnte Process nicht starten!", LogLevel.ERROR);
                 onStartFailure();
             }
 
-            onStop();
+            postStop();
         }, "Process-" + processFileName + "-Thread");
 
         processThread.start();

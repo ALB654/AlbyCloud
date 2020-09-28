@@ -5,14 +5,11 @@ package de.alb654.AlbySpigotPlugin.api;
  * Created by Aaron Bernert on 29.6.2020
  */
 
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import de.alb654.AlbySpigotPlugin.MongoDB.MongoManager;
 import de.alb654.AlbySpigotPlugin.SpigotPlugin;
 import de.alb654.AlbySpigotPlugin.api.server.ServerManager;
 import de.alb654.AlbySpigotPlugin.events.JoinAndQuitListener;
 import de.alb654.AlbySpigotPlugin.network.BungeeConnection;
-import org.bson.Document;
+import de.alb654.AlbySpigotPlugin.nick.NickManager;
 
 public class CloudApi {
 
@@ -41,6 +38,10 @@ public class CloudApi {
 
     public BungeeConnection getBungeeConnection() {
         return bungeeConnection;
+    }
+
+    public NickManager getNickManager() {
+        return getCloud().getNickManager();
     }
 
     public SpigotPlugin getCloud() {

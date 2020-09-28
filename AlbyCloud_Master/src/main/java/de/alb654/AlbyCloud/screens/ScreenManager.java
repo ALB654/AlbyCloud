@@ -56,7 +56,8 @@ public class ScreenManager {
     }
 
     public boolean deleteScreen(String name) {
-        if(!name.equals(ERROR_SCREEN))
+        Screen screen = getScreen(name);
+        if(!screen.equals(getScreen(ERROR_SCREEN)))
             return screens.remove(getScreen(name));
         return false;
     }

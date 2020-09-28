@@ -14,7 +14,7 @@ import de.alb654.AlbyCloud.utils.ConsoleColor;
 public class HelpCommand extends Command {
 
     public HelpCommand() {
-        super("Help", "Zeigt alle Commands an", "help [command]", "hilfe");
+        super("Help", "Zeigt alle Commands an", "help [command]","hilfe");
     }
 
     @Override
